@@ -10,7 +10,7 @@ jobs:
         node-version: [12.x]
 
       - run: npm install
-      - run:   echo ::set-env name=PULL_NUMBER::$(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
+      - run: echo ::set-env name=PULL_NUMBER::$(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
       - run: echo $PULL_NUMBER
       - name: testing script
         run: node app.js
