@@ -1,9 +1,6 @@
 name: lighthouse-ci
 
-on:
-  pull_request:
-    branches:
-      - test2
+on: [pull_request]
 
 jobs:
   build:
