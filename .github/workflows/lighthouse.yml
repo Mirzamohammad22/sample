@@ -1,7 +1,7 @@
 name: lighthouse-ci
 
 on:
-  pull_request:
+  push:
     branches:
       - test2
 
@@ -33,3 +33,5 @@ jobs:
         with:
           name: Lighthouse reports
           path: /tmp/artifacts
+      - name: testing script
+        run: node app.js
