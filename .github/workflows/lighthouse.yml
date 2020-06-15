@@ -1,7 +1,11 @@
 name: lighthouse-ci
 
-on: [pull_request]
-  
+on: 
+  pull_request:
+    branches:
+      - test2
+      - master
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -9,8 +13,8 @@ jobs:
       matrix:
         node-version: [12.x]
     steps:
-      - run: npm install
       - run: echo ::set-env name=PULL_NUMBER::$(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
       - run: echo $PULL_NUMBER
+      - run: npm install
       - name: testing script
         run: node app.js
