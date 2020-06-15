@@ -33,5 +33,6 @@ jobs:
         with:
           name: Lighthouse reports
           path: /tmp/artifacts
+      - run: npm install
       - name: testing script
         run: node app.js
