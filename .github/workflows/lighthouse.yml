@@ -3,37 +3,61 @@ name: lighthouse-ci
 on:
   pull_request:
     branches:
+      - staging
       - master
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
     strategy:
       matrix:
         node-version: [12.x]
 
     steps:
       - uses: actions/checkout@v2
+
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
 
-      - run: mkdir /tmp/artifacts
-      - name: Run Lighthouse
-        uses: foo-software/lighthouse-check-action@master
-        with:
-          accessToken: ${{ secrets.LIGHTHOUSE_CHECK_GITHUB_ACCESS_TOKEN }}
-          author: ${{ github.actor }}
-          branch: ${{ github.ref }}
-          outputDirectory: /tmp/artifacts
-          urls: "https://www.dubizzle.com"
-          sha: ${{ github.sha }}
-      - name: Upload artifacts
-        uses: actions/upload-artifact@master
-        with:
-          name: Lighthouse reports
-          path: /tmp/artifacts
-    #   - run: echo ::set-env name=PULL_NUMBER::$(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
-    #   - run: echo $PULL_NUMBER
-    #   - run: npm install
-    #   - name: testing script
-    #     run: node app.js
+      - name: Set branch variables
+        id: vars
+        run: |
+
+          echo ::set-output name=branch::"$(echo ${GITHUB_HEAD_REF#refs/heads/})"
+          echo ::set-output name=env::"$(cut -d/ -f1 <<<${GITHUB_HEAD_REF#refs/heads/})"
+          echo ::set-output name=beta::[ 'pw' , 'pro' , 'tech' , 'bid' , 'red' , 'cc' , 'space' ]
+
+      - name: Set current env
+        run: |
+          echo "::set-env name=ENV::${{ steps.vars.outputs.env }}"
+
+      - name: check for staging branch
+        if: steps.vars.outputs.branch != 'staging'
+        run: echo "::set-env name=ENV::space"
+
+      - name: variables
+        run: |
+          echo "${{steps.vars.outputs.beta}}"
+          echo $ENV
+      - name: testing conditions
+        if: contains(steps.vars.outputs.beta,ENV) == true
+        run: |
+          echo passed
+    #   - run: mkdir /tmp/artifacts
+    #   - name: Run Lighthouse
+    #     if: contains(steps.vars.outputs.beta,ENV) == true
+    #     uses: foo-software/lighthouse-check-action@master
+    #     with:
+    #       accessToken: ${{ secrets.LIGHTHOUSE_CHECK_GITHUB_ACCESS_TOKEN }}
+    #       author: ${{ github.actor }}
+    #       branch: ${{ github.ref }}
+    #       outputDirectory: /tmp/artifacts
+    #       urls: https://www.dubizzle.$ENV
+    #       sha: ${{ github.sha }}
+    #   - name: Upload artifacts
+    #     if: contains(steps.vars.outputs.beta,ENV)
+    #     uses: actions/upload-artifact@master
+    #     with:
+    #       name: Lighthouse reports
+    #       path: /tmp/artifacts
