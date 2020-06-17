@@ -41,7 +41,7 @@ jobs:
           echo "${{steps.vars.outputs.beta}}"
           echo $ENV
       - name: testing conditions
-        if: ${{contains(steps.vars.outputs.beta,ENV) == true}}
+        if: ${{contains(steps.vars.outputs.beta,env.ENV) == true}}
         run: |
           echo passed
     #   - run: mkdir /tmp/artifacts
