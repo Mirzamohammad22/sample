@@ -54,7 +54,7 @@ jobs:
           author: ${{ github.actor }}
           branch: ${{ github.ref }}
           outputDirectory: /tmp/artifacts
-          urls: https://www.dubizzle.${{$ENV}}
+          urls: https://www.dubizzle.${{env.ENV}}
           sha: ${{ github.sha }}
 
       - name: Upload artifacts
