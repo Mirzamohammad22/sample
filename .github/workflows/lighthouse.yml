@@ -54,10 +54,11 @@ jobs:
           author: ${{ github.actor }}
           branch: ${{ github.ref }}
           outputDirectory: /tmp/artifacts
-          urls: https://www.dubizzle.$ENV
+          urls: https://www.dubizzle.${{$ENV}}
           sha: ${{ github.sha }}
+
       - name: Upload artifacts
-        if: contains(steps.vars.outputs.beta,ENV)
+        if: ${{contains(steps.vars.outputs.beta,env.ENV) == true}}
         uses: actions/upload-artifact@master
         with:
           name: Lighthouse reports
