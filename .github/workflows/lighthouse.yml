@@ -26,7 +26,7 @@ jobs:
 
           echo ::set-output name=branch::"$(echo ${GITHUB_HEAD_REF#refs/heads/})"
           echo ::set-output name=env::"$(cut -d/ -f1 <<<${GITHUB_HEAD_REF#refs/heads/})"
-          echo ::set-output name=beta::[ 'pw' , 'pro' , 'tech' , 'bid' , 'red' , 'cc' , 'space' , 'ENV' ]
+          echo ::set-output name=beta::[ 'pw' , 'pro' , 'tech' , 'bid' , 'red' , 'cc' , 'space' ]
 
       - name: Set current env
         run: |
@@ -41,7 +41,7 @@ jobs:
           echo "${{steps.vars.outputs.beta}}"
           echo $ENV
       - name: testing conditions
-        if: ${{contains(steps.vars.outputs.beta,env.ENV) == true}}
+        if: ${{contains(steps.vars.outputs.beta,ENV) == true}}
         run: |
           echo passed
     #   - run: mkdir /tmp/artifacts
