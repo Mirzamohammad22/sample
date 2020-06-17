@@ -26,7 +26,7 @@ jobs:
 
           echo ::set-output name=branch::"$(echo ${GITHUB_HEAD_REF#refs/heads/})"
           echo ::set-output name=env::"$(cut -d/ -f1 <<<${GITHUB_HEAD_REF#refs/heads/})"
-          echo ::set-output name=beta::[ 'pw' , 'pro' , 'tech' , 'bid' , 'red' , 'cc' , 'space' ]
+          echo ::set-output name=beta::[ 'pw' , 'pro' , 'tech' , 'bid' , 'red' , 'cc' , 'space' , 'ENV' ]
 
       - name: Set current env
         run: |
