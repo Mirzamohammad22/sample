@@ -44,20 +44,21 @@ jobs:
         if: ${{contains(steps.vars.outputs.beta,env.ENV) == true}}
         run: |
           echo passed
-    #   - run: mkdir /tmp/artifacts
-    #   - name: Run Lighthouse
-    #     if: contains(steps.vars.outputs.beta,ENV) == true
-    #     uses: foo-software/lighthouse-check-action@master
-    #     with:
-    #       accessToken: ${{ secrets.LIGHTHOUSE_CHECK_GITHUB_ACCESS_TOKEN }}
-    #       author: ${{ github.actor }}
-    #       branch: ${{ github.ref }}
-    #       outputDirectory: /tmp/artifacts
-    #       urls: https://www.dubizzle.$ENV
-    #       sha: ${{ github.sha }}
-    #   - name: Upload artifacts
-    #     if: contains(steps.vars.outputs.beta,ENV)
-    #     uses: actions/upload-artifact@master
-    #     with:
-    #       name: Lighthouse reports
-    #       path: /tmp/artifacts
+
+      - run: mkdir /tmp/artifacts
+      - name: Run Lighthouse
+        if: ${{contains(steps.vars.outputs.beta,env.ENV) == true}}
+        uses: foo-software/lighthouse-check-action@master
+        with:
+          accessToken: ${{ secrets.LIGHTHOUSE_CHECK_GITHUB_ACCESS_TOKEN }}
+          author: ${{ github.actor }}
+          branch: ${{ github.ref }}
+          outputDirectory: /tmp/artifacts
+          urls: https://www.dubizzle.$ENV
+          sha: ${{ github.sha }}
+      - name: Upload artifacts
+        if: contains(steps.vars.outputs.beta,ENV)
+        uses: actions/upload-artifact@master
+        with:
+          name: Lighthouse reports
+          path: /tmp/artifacts
