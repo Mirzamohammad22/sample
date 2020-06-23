@@ -45,21 +45,29 @@ jobs:
         run: |
           echo passed
 
-      - run: mkdir /tmp/artifacts
-      - name: Run Lighthouse
-        if: ${{contains(steps.vars.outputs.beta,env.ENV) == true}}
-        uses: foo-software/lighthouse-check-action@master
-        with:
-          accessToken: ${{ secrets.LIGHTHOUSE_CHECK_GITHUB_ACCESS_TOKEN }}
-          author: ${{ github.actor }}
-          branch: ${{ github.ref }}
-          outputDirectory: /tmp/artifacts
-          urls: https://www.dubizzle.${{env.ENV}}
-          sha: ${{ github.sha }}
+      # - run: mkdir /tmp/artifacts
+      # - name: Run Lighthouse
+      #   if: ${{contains(steps.vars.outputs.beta,env.ENV) == true}}
+      #   uses: foo-software/lighthouse-check-action@master
+      #   with:
+      #     accessToken: ${{ secrets.LIGHTHOUSE_CHECK_GITHUB_ACCESS_TOKEN }}
+      #     author: ${{ github.actor }}
+      #     branch: ${{ github.ref }}
+      #     outputDirectory: /tmp/artifacts
+      #     urls: https://www.dubizzle.${{env.ENV}}
+      #     sha: ${{ github.sha }}
 
-      - name: Upload artifacts
-        if: ${{contains(steps.vars.outputs.beta,env.ENV) == true}}
-        uses: actions/upload-artifact@master
-        with:
-          name: Lighthouse reports
-          path: /tmp/artifacts
+      # - name: Upload artifacts
+      #   if: ${{contains(steps.vars.outputs.beta,env.ENV) == true}}
+      #   uses: actions/upload-artifact@master
+      #   with:
+      #     name: Lighthouse reports
+      #     path: /tmp/artifacts
+      - run: npm install
+      - name: Run Lighthouse
+        run: node app 
+        env:
+          GITHUB_REPO: ${{github.repository}}
+          GITHUB_TOKEN: ${{secrets.LIGHTHOUSE_CHECK_GITHUB_ACCESS_TOKEN}}
+          GITHUB_REF: ${{github.ref}}
+
